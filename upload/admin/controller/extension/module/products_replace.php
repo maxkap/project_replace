@@ -1,6 +1,6 @@
 <?php
 
-class ControllerModuleProductsReplace extends Controller {
+class ControllerExtensionModuleProductsReplace extends Controller {
 
     private $token_name;
 

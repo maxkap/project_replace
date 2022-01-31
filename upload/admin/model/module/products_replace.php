@@ -1,5 +1,7 @@
 <?php
 class ModelModuleProductsReplace extends Model {
+
+    private $emulate;
     
     public function getProductIdsByCategory($category_id) {
         
@@ -17,10 +19,21 @@ class ModelModuleProductsReplace extends Model {
     
     
     public function deleteProductsFromCategory($category_id) {
-        $this->db->query("DELETE FROM " . DB_PREFIX . "product_to_category WHERE category_id = '" . (int)$category_id . "'");
+
+        if ($this->emulate){
+            echo "DELETE FROM " . DB_PREFIX . "product_to_category WHERE category_id = '" . (int)$category_id . "'"."<br>";
+        }
+        else{
+            $this->db->query("DELETE FROM " . DB_PREFIX . "product_to_category WHERE category_id = '" . (int)$category_id . "'");
+        }
+
+
+
     }
     
-    public function startReplace($categories_from, $category_to, $replace_to = 0, $replace_from = 0) {
+    public function startReplace($categories_from, $category_to, $replace_to = 0, $replace_from = 0, $emulate = 0) {
+
+        $this->emulate = $emulate;
         
         if ($replace_to){
             $this->deleteProductsFromCategory($category_to);
@@ -56,8 +69,16 @@ class ModelModuleProductsReplace extends Model {
             $insert[] = " ($product_id, $category_id) ";
             
         }
-        
-        $this->db->query($sql . implode(',', $insert));
+
+        if ($this->emulate){
+            echo $sql . implode(',', $insert)."<br>";
+        }
+        else{
+            $this->db->query($sql . implode(',', $insert));
+        }
+
+
+
         
     }
     
